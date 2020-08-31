@@ -9,8 +9,8 @@ namespace KerbalRepairsInterface
     public interface IRepairable
     {
         void AcceptRepairsController(IRepairsController repairsController);
-        void RepairStarted(RepairData repairData);
-        void RepairStopped(RepairData repairData);
+        void RepairSelected(RepairData repairData);
+        void RepairDeselected(RepairData repairData);
         void RepairFinished(RepairData repairData);
         void RequestRepairs();
     }

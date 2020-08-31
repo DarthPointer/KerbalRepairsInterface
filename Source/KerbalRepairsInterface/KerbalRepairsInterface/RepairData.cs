@@ -12,51 +12,53 @@ namespace KerbalRepairsInterface
         string repairOptionDescription;
         Dictionary<string, double> requestedResources;
 
-        bool inProgress = false;
+        bool isSelected = false;
         bool completed = false;
         public double progressRatio;                // [0; 1]
         public double quality;                      // [0; 1]
 
-        public IKRISerializedCustomData customControllerData;
-        public IKRISerializedCustomData customTargetData;
+        public object customControllerData;
+        public object customTargetData;
 
         public RepairData(IRepairable repairTarget, string repairOptionDescription, Dictionary<string, double> requestedResources,
-            bool inProgress = false, bool completed = false, float progressRatio = 0)
+            bool isSelected = false, bool completed = false, float progressRatio = 0)
         {
             this.repairTarget = repairTarget;
             this.repairOptionDescription = repairOptionDescription;
             this.requestedResources = requestedResources;
 
-            this.inProgress = inProgress;
+            this.isSelected = isSelected;
             this.completed = completed;
             this.progressRatio = progressRatio;
         }
 
         public string RepairOptionDescription => repairOptionDescription;
-        public bool InProgress => inProgress;
+        public bool IsSelected => isSelected;
 
-        public void Start()
+        public Dictionary<string, double> RequestedResources => requestedResources;
+
+        public void Select()
         {
-            inProgress = true;
-            repairTarget.RepairStarted(this);
+            isSelected = true;
+            repairTarget.RepairSelected(this);
         }
 
-        public void Stop()
+        public void Deselect()
         {
-            inProgress = false;
-            repairTarget.RepairStopped(this);
+            isSelected = false;
+            repairTarget.RepairDeselected(this);
         }
 
         public void Toggle()
         {
-            inProgress = !inProgress;
-            if (inProgress)
+            isSelected = !isSelected;
+            if (isSelected)
             {
-                repairTarget.RepairStarted(this);
+                repairTarget.RepairSelected(this);
             }
             else
             {
-                repairTarget.RepairStopped(this);
+                repairTarget.RepairDeselected(this);
             }
         }
 
@@ -66,6 +68,28 @@ namespace KerbalRepairsInterface
             progressRatio = 1;
 
             repairTarget.RepairFinished(this);
+        }
+
+        public string Serialize()
+        {
+            string result = "";
+
+            if (customControllerData as IKRISerializedCustomData != null)
+            {
+                string cCDString = (customControllerData as IKRISerializedCustomData).Serialize();
+                result += $"CustomControllerData {cCDString.Length} :{cCDString}";
+            }
+            if (customTargetData as IKRISerializedCustomData != null)
+            {
+                string cTDString = (customTargetData as IKRISerializedCustomData).Serialize();
+                result += $"CustomTargetData {cTDString.Length} :{cTDString}";
+            }
+
+            return result;
+        }
+
+        public void Deserialize(string serialized)
+        {
         }
     }
 }
