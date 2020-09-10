@@ -49,7 +49,7 @@ namespace KerbalRepairsInterface
             repairTarget.RepairDeselected(this);
         }
 
-        public void Toggle()
+        public void ToggleSelection()
         {
             isSelected = !isSelected;
             if (isSelected)
