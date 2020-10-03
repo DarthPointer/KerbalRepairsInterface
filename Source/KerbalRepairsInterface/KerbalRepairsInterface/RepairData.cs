@@ -11,6 +11,7 @@ namespace KerbalRepairsInterface
         IRepairable repairTarget;
         string repairOptionDescription;
         Dictionary<string, double> requestedResources;
+        bool useForFullRepair;
 
         bool isSelected = false;
         bool completed = false;
@@ -21,11 +22,12 @@ namespace KerbalRepairsInterface
         public object customTargetData;
 
         public RepairData(IRepairable repairTarget, string repairOptionDescription, Dictionary<string, double> requestedResources,
-            bool isSelected = false, bool completed = false, float progressRatio = 0)
+            bool useForFullRepair, bool isSelected = false, bool completed = false, float progressRatio = 0)
         {
             this.repairTarget = repairTarget;
             this.repairOptionDescription = repairOptionDescription;
             this.requestedResources = requestedResources;
+            this.useForFullRepair = useForFullRepair;
 
             this.isSelected = isSelected;
             this.completed = completed;
@@ -33,6 +35,7 @@ namespace KerbalRepairsInterface
         }
 
         public string RepairOptionDescription => repairOptionDescription;
+        public bool UseForFullRepair => useForFullRepair;
         public bool IsSelected => isSelected;
 
         public Dictionary<string, double> RequestedResources => requestedResources;
